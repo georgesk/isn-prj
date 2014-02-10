@@ -648,7 +648,7 @@ $(document).on('drop', '#dropimage', function(e) {
             var reader = new FileReader();
 	    reader.onload = function (evt) {
 		var dataURL=evt.target.result;
-		var image=$("<img>",{src:dataURL, id:"supportImage", "class": "data"});
+		var image=$("<img>",{src:dataURL, id:"supportImage", "class": "data", height: "32em"});
 		$("#supportImage").remove();
 		$("#dropimage").append(image);
 	    };
@@ -857,6 +857,8 @@ function putData(obj){
 	var line=$(validationLines[i]);
 	refreshBinaire1(line);
     }
+    // reporte les noms des élèves
+    reporteNoms()
 }
 
 //// activation des infobulles de luxe //////////////////////////////

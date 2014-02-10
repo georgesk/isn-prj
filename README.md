@@ -52,3 +52,6 @@ si on ne fait rien, par un nom de fichier avec l'extension <code>.json</code.
 Le modèle de sécurité des navigateurs web étant très strict, le fichier
 à lire doit se situer le même répertoire de celui où réside le fichier
 index.html
+
+Quand on installe une image, celle-ci ne doit pas être trop grande ; rien 
+n'est prévu si elle déborde sur le reste de la page.
