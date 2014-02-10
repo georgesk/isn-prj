@@ -50,5 +50,5 @@ si on ne fait rien, par un nom de fichier avec l'extension <code>.json</code.
 ## BOGUES connues
 
 Le modèle de sécurité des navigateurs web étant très strict, le fichier
-à lire doit se situer dans un sous-répertoire de celui où réside le fichier
+à lire doit se situer le même répertoire de celui où réside le fichier
 index.html
