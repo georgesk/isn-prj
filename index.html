@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{title}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="themes-smoothness-jquery-ui.css"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<script type="text/javascript" src="programme.js"></script>
+</head>
+<body onload="initPage()">
+  <div id="tabs">
+    <ul>
+      <li><a href="#fragment-1">Projet ISN</a></li>
+      <li><a href="#fragment-2">Cahier de charges</a></li>
+      <li><a href="#fragment-3">Répartition</a></li>
+      <li><a href="#fragment-4" id="tabEleveA">Élève A</a></li>
+      <li><a href="#fragment-5" id="tabEleveB">Élève B</a></li>
+      <li><a href="#fragment-6" id="tabEleveC">Élève C</a></li>
+      <li><a href="#fragment-7" id="tabData">Données</a></li>
+      <li><a href="#fragment-8" id="tabData">Tâches connues</a></li>
+    </ul>
+    <div id="fragment-1">
+      <div id="hautGauche">
+	<h1 style="align:center;">Fiche Projet</h1>
+	<form action="#">
+	  <fieldset id="effectif" class="data"><legend><span class="main">Effectif</span></legend>
+	    <select name="effectif">
+	      <option value="2">2 élèves</option>
+	      <option value="3" selected="selected" >3 élèves</option>
+	    </select>
+	  </fieldset>
+	  <div style="clear:both"></div>
+	  <fieldset><legend><span class="main">Intitulé du projet</span></legend>
+	  <textarea id="intitule" cols="80" rows="5" class="blueInput wideTextarea data"></textarea>
+	  </fieldset>
+	  <fieldset><legend><span class="main">Enjeu</span> <span class="minor">(question de société ...)</span></legend>
+	  <textarea id="enjeu" cols="80" rows="5" class="blueInput wideTextarea data"></textarea>
+	  </fieldset>
+	  <fieldset><legend><span class="main">Problématique</span> <span class="minor">(problème à résoudre)</span></legend>
+	  <textarea id="problematique" cols="80" rows="5" class="blueInput wideTextarea data"></textarea>
+	  </fieldset>
+	  <fieldset><legend><span class="main">Professeurs</span></legend>
+	  Professeur référent : <input type="text" id="prof" class="blueInput data"/><br/>
+	  Équipe pédagogique associée : <input type="text" id="equipe" class="blueInput verywideInput data"/>
+	  </fieldset>
+	</form>
+      </div>
+      <div id="hautDroite">
+	<img src="en.png" align="right" style="width:120px; margin-left:30px;" alt="logo éducation nationale"/>
+	<form action="#">
+	  <fieldset><legend><span class="main">date et lieu</span></legend>
+	  Date : <input type="text" id="annee" class="data"/><br/>
+	  Lieu : <input type="text" id="lycee" class="data"/>
+	  </fieldset>
+	  <fieldset><legend><span class="main">Support</span> <span class="minor">(coller une image donnant un support visuel au projet)</span></legend>
+	  <div id="dropimage"  class="blueInput">
+	    <!-- will contain a dynamically created canvas -->
+	  </div>
+	  </fieldset>
+	</form>
+      </div>
+      <div style="clear:both"></div>
+      <div id="basGauche">
+	<form action="#">
+	  <fieldset><legend><span class="main">Élèves du groupe du projet</span></legend>
+	  <table>
+	    <tr><th></th><th><br/><br/>Nom</th><th><br/><br/>Prénom</th></tr>
+	    <tr><th>Élève A :</th><td><input type="text" id="nomEleveA" class="blueInput data" onchange="reporteNoms();"/></td><td><input type="text" id="prenomEleveA" class="blueInput data" onchange="reporteNoms();"/></td></tr>
+	    <tr><th>Élève B :</th><td><input type="text" id="nomEleveB" class="blueInput data" onchange="reporteNoms();"/></td><td><input type="text" id="prenomEleveB" class="blueInput data" onchange="reporteNoms();"/></td></tr>
+	    <tr><th>Élève C :</th><td><input type="text" id="nomEleveC" class="blueInput data" onchange="reporteNoms();"/></td><td><input type="text" id="prenomEleveC" class="blueInput data" onchange="reporteNoms();"/></td></tr>
+	  </table>
+	  </fieldset>
+	</form>
+      </div>
+      <div id="basDroite">
+	<form action="#">
+	  <fieldset><legend><span class="main">Récapitulatif</span></legend>
+	  <table>
+	    <tr><th>Compétences <br/>C1 à C4<br/> Évaluables</th><th>Plus de 70% de <br/>capacités prises en <br/>compte</th><th>Pluridisciplinarité</th></tr>
+	    <tr><td id="c1c4elA" class="no">NON</td><td id="capa70elA" class="no">NON</td><td>(intervention de professeurs</td></tr>
+	    <tr><td id="c1c4elB" class="no">NON</td><td id="capa70elB" class="no">NON</td><td> d'autres disciplines)</td></tr>
+	    <tr><td id="c1c4elC" class="no">NON</td><td id="capa70elC" class="no">NON</td><td id="pluridiscipline" class="no">NON</td></tr>
+	  </table>
+	  </fieldset>
+	</form>
+      </div>
+   <div style="clear:both"></div>
+   </div>
+    <div id="fragment-2">
+     <h1>Cahier des charges</h1>
+     <form action="#">
+       <fieldset><legend>Fonctionnalités/contraintes ; critères ; niveaux d'exigence</legend>
+       <table class="cahierCharges">
+	 <tr id="tableauCdC"><th colspan="2" class="roundBlackBorder">Fonctions</th><th class="roundBlackBorder">Critères</th><th class="roundBlackBorder">Niveau</th></tr>
+	 <!-- la suite de ce tableau est créée par initiPage() -->
+       </table>
+       </fieldset>
+     </form>
+    </div>
+    <div id="fragment-3">
+      <h1>DÉCLINAISON DU PROJET EN TÂCHES</h1>
+      <form action="#">
+	<fieldset><legend>Étapes et tâches</legend>
+	<table>
+	  <tr><td colspan="2"></td><td class="roundBlackBorder">Élève A</td><td class="roundBlackBorder">Élève B</td><td class="roundBlackBorder">Élève C</td><td class="sepTableau"></td><td style="text-align: center;" colspan="2">Contribution de professeurs</td></tr>
+	  <tr><td colspan="2"></td><td class="roundBlackBorder" id="totalTachesA">0</td><td class="roundBlackBorder" id="totalTachesB">0</td><td class="roundBlackBorder" id="totalTachesC">0</td><td class="sepTableau"></td><td style="text-align: center;" colspan="2">d'autres disciplines</td></tr>
+	  <tr id="titreTableau"><th class="titreTableau" colspan="5">Spécification/planification</th><td class="sepTableau"></td><th class="titreTableauVert" colspan="2">Professeur / discipline</th></tr>
+	  <!-- la suite de ce tableau est créée par initiPage() -->
+	</table>
+	</fieldset>
+      </form>
+    </div>
+    <div id="fragment-4">
+      <div id="tachesA">
+	  <!-- la suite de cette partie est créée par initiPage() -->
+      </div>
+    </div>
+    <div id="fragment-5">
+      <div id="tachesB">
+	  <!-- la suite de cette partie est créée par initiPage() -->
+      </div>
+    </div>
+    <div id="fragment-6">
+      <div id="tachesC">
+	  <!-- la suite de cette partie est créée par initiPage() -->
+      </div>
+    </div>
+    <div id="fragment-7">
+      <!-- la suite de cette partie est créée par initiPage() -->
+      <pre id="data">
+      </pre>
+    </div>
+    <div style="clear:both"></div>
+    <div id="fragment-8">
+      <!-- la suite de cette partie est créée par initiPage() -->
+    </div>
+  </div>
+  <div id="saveLoad">
+    <input type="button" value="Ouvrir" onclick="load()"/>
+    <input type="button" value="Enregistrer" onclick="save()"/>
+  </div>
+  <div id="dialog-load" title="Ouvrir un fichier">
+    <h1>Tirez-glissez le fichier à ouvrir ci-dessous</h1>
+      <div id="dropFile" class="greenInput">
+      </div>    
+  </div>
+</body>
+</html>

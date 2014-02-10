@@ -1,0 +1,249 @@
+#hautGauche{
+    float: left;
+    width: 50%;
+}
+
+#hautDroite{
+    float: right;
+    width: 50%;
+}
+
+#basGauche{
+    float: left;
+    width: 50%;
+}
+
+#basDroite{
+    float: right;
+    width: 50%;
+}
+
+#basdroite fieldset {
+    border: red solid 2px;
+    border-radius: 8px;
+}
+
+#effectif{
+    width:25%;
+    float:right;
+}
+
+#intitule legend{
+    font-weight: bold;
+    font-size: 110%;
+}
+
+fieldset {
+    border: #ccc solid 1px;
+    border-radius: 8px;
+}
+
+.wideTextarea{
+    width:100%;
+}
+
+.blueInput{
+    border: #568ed5 solid 1px;
+    padding:0.25em;
+    background: #dce6f2;
+    border-radius: 5px;
+}
+
+.greenInput{
+    border: #77933c solid 1px;
+    padding:0.25em;
+    background: #d7e4bd;
+    border-radius: 5px;
+}
+
+.roundBlackBorder{
+    border: black solid 1px;
+    padding:0.25em;
+    border-radius: 5px;
+}
+
+.titreTableau{
+    border: black solid 1px;
+    background: navy;
+    color:white;
+    font-size: 140%;
+    padding:0.25em;
+    border-radius: 5px;
+}
+
+.titreTableauVert{
+    border: black solid 1px;
+    background: #77933c;
+    color:white;
+    font-size: 140%;
+    padding:0.25em;
+    border-radius: 5px;
+}
+
+.narrowCell{
+    width:5em;
+}
+
+.mediumCell{
+    width:10em;
+}
+
+.wideCell{
+    width:20em;
+}
+
+.verywideCell{
+    width:45em;
+}
+
+.verywideInput{
+    width:200%;
+}
+
+.sepTableau{
+    width:3em;
+}
+
+.cahierCharges{
+    font-size:140%
+}
+
+#intitule textarea{
+    border: black solid 2px;
+}
+
+.recap{
+    color: red;
+    background: pink;
+    text-align: center;
+}
+
+.no{
+    color: red;
+    background: pink;
+    text-align: center;
+}
+
+.yes{
+    color:green;
+    background: lightgreen;
+    text-aligne: center;
+}
+
+legend .main{
+    font-weight:bold;
+    font-size: 120%;
+}
+
+legend .minor{
+    margin-left: 2em;
+    font-style:italic;
+    font-size: 90%;
+    color: #568ed5;
+}
+
+.verticaltext {
+    writing-mode:vertical-rl;
+}
+
+.yellowBg {
+    border: black solid 1px;
+    padding:0.25em;
+    border-radius: 5px;
+    background: #ffff88;
+}
+
+.lightGreenBg{
+    border: black solid 1px;
+    padding:0.25em;
+    border-radius: 5px;
+    background: #d3ffd0;
+}
+
+.lightcyanBg{
+    border: black solid 1px;
+    padding:0.25em;
+    border-radius: 5px;
+    background: #d0fff1;
+}
+
+.ui-tooltip, .arrow:after {
+    background: black;
+    border: 2px solid white;
+}
+.ui-tooltip {
+    padding: 10px 20px;
+    color: white;
+    border-radius: 20px;
+    font: bold 12px "Helvetica Neue", Sans-Serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+}
+.arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: -16px;
+}
+.arrow.top {
+    top: -16px;
+    bottom: auto;
+}
+.arrow.left {
+    left: 20%;
+}
+.arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    tranform: rotate(45deg);
+}
+.arrow.top:after {
+    bottom: -20px;
+    top: auto;
+}
+
+#saveLoad {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
+
+#dropimage{
+    width:100%;
+    height:33em;
+}
+
+.checked{
+    background-image: url(checked.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+}
+
+.unchecked{
+    background-image: url(unchecked.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+}
+
+#data{
+    float: left;
+    border: 1px solid grey;
+}
+
+#dropFile{
+    width:300px; 
+    height:100px;"
+}
+
