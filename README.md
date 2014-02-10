@@ -11,6 +11,31 @@ L'outil isn-prj permet de gérer les dossiers de projet localement,
 
 Voir le fichier COPYING
 
+## Installation
+
+Il suffit de copier l'ensemble des fichiers dans un répertoire, et c'est
+fonctionnel, sous réserve que les liens symboliques pointent vers les
+bons emplacements.
+
+Si vous utilisez un système De bian ou Ubuntu, ces liens symboliques 
+fonctionnenent biensous réserve d'installer les paquets suivants :
+
+  * <code>libjs-jquery</code>
+  * <code>libjs-jquery-ui</code>
+
+Dans tous les autres cas, assurez-vous en téléchargeant des versions récentes
+de jquery et jquery-ui, que les fichiers nécessaires puissent être trouvés
+sous les chemins suivants :
+
+  * <code >jquery.js</code>
+  * <code >jquery-ui.js</code>
+  * <code >themes-smoothness-jquery-ui.css</code>
+
+Notez bien que ces fichiers-là vont en inclure d'autres qui viennent lors
+du téléchargement. Vous pouvez aussi modifier le début de la page index.html
+afin de modifier les chemins vers les fichiers nécessaires, si cela est
+plus facile dans votre cas.
+
 ## Mode d'emploi
 
 <code>firefox index.html</code> Permet de lancer l'application.
