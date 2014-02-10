@@ -694,8 +694,8 @@ $(document).on('drop', '#dropFile', function(e) {
 	    var jqxhr = $.getJSON(f.name, function(data) {
 		$( "#dialog-load" ).dialog( "close" );
 		loadData(data);
-	    }).fail(function(){
-		alert ("Contenu de fichier incompatible (pas au format JSON).");
+	    }).fail(function(d, textStatus, error){
+		alert ("Contenu de fichier incompatible (pas au format JSON).\nStatut : "+textStatus+", erreur : "+error);
 	    });
         }  
     }
@@ -740,7 +740,7 @@ function loadData(data){
 function save(){
     var json=JSON.stringify(ownData(), null, "  ");
     $("#data").text(json);
-    //window.open( "data:text/json;charset=utf-8," + escape(json));
+    // window.open( "data:text/json;charset=utf-8," + escape(json));
     window.open( "data:text/json;charset=utf-8," + json);
 }
 

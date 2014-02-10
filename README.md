@@ -46,3 +46,9 @@ Notez bien : comme Firefox ne sait pas prévoir de nom de fichier a priori
 pour une donnée récoltée dans un élément de page web, il est conseillé de
 changer le nom de fichier (quelque chose qui se termine par <code>.part</code>
 si on ne fait rien, par un nom de fichier avec l'extension <code>.json</code.
+
+## BOGUES connues
+
+Le modèle de sécurité des navigateurs web étant très strict, le fichier
+à lire doit se situer dans un sous-répertoire de celui où réside le fichier
+index.html
