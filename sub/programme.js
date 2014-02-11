@@ -888,7 +888,7 @@ function load(){
  * imbriqués)
  * @param object1 le premier objet
  * @param object2 le deuxième objet
- * return une valeur vraie si on trouve des structures équivalentes
+ * @return une valeur vraie si on trouve des structures équivalentes
  **/
 function sameStruct1(object1, object2) {
     var merged = $.extend({}, object1, object2);
@@ -908,7 +908,7 @@ function sameStruct1(object1, object2) {
  * imbriqués), pour une inclusion possible.
  * @param object1 le premier objet
  * @param object2 le deuxième objet
- * return une valeur vraie la structure de l'objet 1 contient l'autre structure
+ * @return une valeur vraie la structure de l'objet 1 contient l'autre structure
  **/
 function includeStruct1(object1, object2) {
     var merged = $.extend({}, object1, object2);
