@@ -2,11 +2,17 @@
 <head>
 <title>Évaluation</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel='stylesheet' type='text/css' href='http://localhost/jsxgraph/distrib/jsxgraph.css' />
+<!-- recent version of jsxgraph required (>= v0.99.1
+<link rel='stylesheet' type='text/css' href='http://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css' />
+ -->
+<link rel='stylesheet' type='text/css' href='jsxgraph.css' />
+<link rel='stylesheet' type='text/css' href='sub/themes-smoothness-jquery-ui.css' />
 <!-- recent version of jsxgraph required (>= v0.99.1
 <script src='http://jsxgraph.uni-bayreuth.de/distrib/jsxgraphcore.js' type='text/javascript'></script>
  -->
 <script type='text/javascript' src='jsxgraphcore.js' type='text/javascript'></script>
+<script type='text/javascript' src='sub/jquery.js' type='text/javascript'></script>
+<script type='text/javascript' src='sub/jquery-ui.js' type='text/javascript'></script>
 </head>
 <body>
 <p>
@@ -14,20 +20,47 @@
 <div id='jxgbox' class='jxgbox' style='width:500px; height:500px;'></div>
 
 <script type='text/javascript'>
- var nbCapacites = 5; // nombre de capacités.
+ function makeSnapFunction(points, levels){ 
+   // fabrique une fonction 
+   // @param points une liste de points
+   // @param levels une liste de valeurs de ces points
+   return function(){
+     // dans le contexte de la fonction renvoyée, 'this' est censé
+     // être un Glider
+     var found=0;
+     var d = this.Dist(points[0]);
+     for(var i=1; i < points.length; i++){
+       var d1 = this.Dist(points[i]);
+       if (d1 < d){
+         d = d1;
+	 found=i;
+       }
+     }
+     console.log(this.name, levels[found]);
+   };
+ };
+
+ var indicateurs = ["C1", "C2", "C3", "C4", "C5"];
+ var nbCapacites = indicateurs.length; // nombre d'indicateurs
+ var levels = [0, 1, 2, 3]; // niveaux possibles
+ var r1 = 6, r2 = 9; // plus petite et plus grande valeur du rayon
  var brd = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-10, 10, 10, -10]});
 
+ var center = brd.create('point', [0, 0],{name: "", fixed: true, face: '+', size: 1,});
  var gliders=[];
  for(var i=0; i < nbCapacites; i++){
-  var angle = 2 * Math.PI * i / nbCapacites;
-  var a1 = brd.create('point', [10*Math.cos(angle), 10*Math.sin(angle)],{name: "", fixed: true,});
-  var a2 = brd.create('point', [4*Math.cos(angle), 4*Math.sin(angle)],{name: "", fixed: true,});
-  var a3 = brd.create('point', [6*Math.cos(angle), 6*Math.sin(angle)],{name: "", fixed: true,});
-  var a4 = brd.create('point', [8*Math.cos(angle), 8*Math.sin(angle)],{name: "", fixed: true,});
-  var aSlide = brd.create('segment', [a1, a2]);
-  var a = brd.create('glider', [4.5*Math.cos(angle), 4.5*Math.sin(angle), aSlide], {attractors: [a1, a2, a3, a4], attractorDistance: 1.5, name: "C"+(1+i),});
+   var angle = 2 * Math.PI * i / nbCapacites;
+   var attractors=[];
+   for(j=0; j < levels.length; j++){
+     var r = r1 + (levels[j]-levels[0])*(r2-r1)/(levels[levels.length-1]- levels[0]);
+     var at = brd.create('point', [r*Math.cos(angle), r*Math.sin(angle)],{name: "", fixed: true, face: '+', size: 2,});
+     attractors.push(at);
+     var c = brd.create('circle',[center, r], {color: 'lightgrey', dash: 2, fillOpacity: 0,});
+  }
+   var aSlide = brd.create('segment', [attractors[0], attractors[attractors.length-1]]);
+   var a = brd.create('glider', [r1*Math.cos(angle), r1*Math.sin(angle), aSlide], {attractors: attractors, attractorDistance: (r2-r1)/levels.length, name: indicateurs[i],});
+  a.handleSnapToPoints = makeSnapFunction(attractors, levels);
   gliders.push(a);
-  console.log(i, a, "attractors", a.attractors)
 }
  var p = brd.create('polygon', gliders, {hasInnerPoints: true});
 </script>
