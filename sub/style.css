@@ -244,6 +244,11 @@ legend .minor{
 
 #dropFile{
     width:300px; 
-    height:100px;"
+    height:100px;
 }
 
+#feedback1 {
+    width: 500px;
+    height: 100px;
+    border: 1px solid grey;
+}
