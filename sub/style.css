@@ -271,3 +271,23 @@ legend .minor{
     padding: 0.2ex;
     margin: 0.5ex;
 }
+
+.table1 {
+    border-collapse: collapse;
+}
+
+.table2 {
+    border-collapse: collapse;
+}
+
+.table1 th, td {
+    border: 1px solid black;
+}
+.table2 th, td {
+    border: 1px solid black;
+}
+
+.table3 {
+    border-collapse: collapse;
+    width: 100%;
+}

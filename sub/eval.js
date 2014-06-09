@@ -158,6 +158,79 @@ function feedback1(){
     html += "</p>";
     $("#feedback1").html(html);
 }
+/**
+ * Création de la vue tabulaire des compétences et des indicateurs
+ * insère un tableau dans un élément DOM
+ * @param boxid l'id d'un élément DOM
+ **/
+function createTables(boxid){
+    var t =$("<table>",{"class": "table1"});
+    $("#"+boxid).append(t);
+    for(var c0 in competences){
+	var tr=$("<tr>");
+	t.append(tr);
+	var cg=$("<colgroup>");
+	t.append(cg);
+	var col1=$("<col span='1' style='width: 20%;'>");
+	cg.append(col1);
+	var col2=$("<col span='1' style='width: 80%;'>");
+	cg.append(col2);
+	var td = $("<td>");
+	td.html("<b>"+c0+"</b> "+competences[c0].desc);
+	tr.append(td);
+	if ("sub" in competences[c0]){
+	    var td1=$("<td>");
+	    tr.append(td1);
+	    var t1=$("<table>",{"class": "table2"});
+	    td1.append(t1);
+	    var cg=$("<colgroup>");
+	    t1.append(cg);
+	    var col1=$("<col span='1' style='width: 40%;'>");
+	    cg.append(col1);
+	    var col2=$("<col span='1' style='width: 60%;'>");
+	    cg.append(col2);
+	    for(var c1 in competences[c0].sub){
+		var tr1 = $("<tr>");
+		t1.append(tr1);
+		var td = $("<td>");
+		td.html("<b>"+c1+"</b> "+competences[c0].sub[c1].desc);
+		tr1.append(td);
+		// on récupère les indicateurs relatifs à la capacité c1
+		var matching = indicateurs.filter(function(elt, idx, arr){return elt[1]==c1;})
+		tr1.append(cellWithTable(matching));
+	    }
+	} else { // pas de subdivision de la compétence
+	    var matching = indicateurs.filter(function(elt, idx, arr){return elt[1]==c0;})
+	    tr.append(cellWithTable(matching));
+	}
+    }
+}
+
+/**
+ * fabrique une case contenant un tableau avec les indicateurs qui
+ * correspondent à une capacité. La case est vide s'il n'y a pas
+ * d'indicteurs sélectionnés.
+ * @param matching tableau d'indicateurs sélectionnés par capacité
+ * @return un objet jQuery représentant une cellule de tableau
+ **/
+function cellWithTable(matching){
+    var td = $("<td>",{"class":"indicateur"});
+    if (matching.length==0) return td;
+    var t2=$("<table>",{"class": "table3"});
+    td.append(t2);
+    var cg=$("<colgroup>");
+    t2.append(cg);
+    var col1=$("<col span='1' style='width: 100%;'>");
+    cg.append(col1);
+    for(var i=0; i < matching.length; i++){
+	var tr=$("<tr>");
+	t2.append(tr);
+	var td1 = $("<td>");
+	tr.append(td1);
+	td1.html(matching[i][0]);
+    }
+    return td;
+}
 
 /**
  * création des curseurs
@@ -202,28 +275,13 @@ function createGliders(boxid){
 	    size: 8,
 	});
 	// on ajoute une fonction déclenchée lorsque les attracteurs agissent
+	//
+	// TODO !! il faudrait aussi réveiller cette fonction de rappel
+	// quand on clique sur le curseur, sans quoi il faut le bouger
+	// pour obtenir les renseignements qui le concernent, en plus.
 	a.handleSnapToPoints = makeSnapFunction(attractors, levels);
 	// on y attache une description complète
-	var capa = indicateurs[i][1];
-	a.desc=capa+" :<br/>"+indicateurs[i][0]+"<br/>";
-	var desc="";
-	if (capa in competences){// on est au niveau supérieur de l'arbre
-	    desc=competences[capa].desc;
-	} else {
-	    var capa0=capa.split(".")[0]; // par exemple, "C1.2" donnera "C1"
-	    if (capa0 in competences && capa in competences[capa0].sub){
-		var d = competences[capa0].sub[capa].desc;
-		d=d.split("/");
-		if (d.length>1){
-		    d="<b>"+d[0]+"</b> "+d[1];
-		} else {
-		    d=d[0];
-		}
-		desc=capa+ " : "+d+"<br/>"+
-		    capa0+" : "+competences[capa0].desc;
-	    }
-	}
-	a.desc+="<div class='competence'>"+desc+"</div>";
+	a.desc = gliderDescription(i);
 	// on ajoute le cuseur à la liste
 	gliders.push(a);
     }
@@ -235,6 +293,36 @@ function createGliders(boxid){
 }
 
 /**
+ * Donne la description complète d'un curseur
+ * @param i le numéro d'ordre du curseur
+ * @return un contenu au format HTML pour mettre dans un <div>
+ **/
+function gliderDescription(i){
+    var result="";
+    var capa = indicateurs[i][1];
+    result=capa+" :<br/>"+indicateurs[i][0]+"<br/>";
+    var desc="";
+    if (capa in competences){// on est au niveau supérieur de l'arbre
+	desc=competences[capa].desc;
+    } else {
+	var capa0=capa.split(".")[0]; // par exemple, "C1.2" donnera "C1"
+	if (capa0 in competences && capa in competences[capa0].sub){
+	    var d = competences[capa0].sub[capa].desc;
+	    d=d.split("/");
+	    if (d.length>1){
+		d="<b>"+d[0]+"</b> "+d[1];
+	    } else {
+		d=d[0];
+	    }
+	    desc=capa+ " : "+d+"<br/>"+
+		capa0+" : "+competences[capa0].desc;
+	}
+    }
+    result+="<div class='competence'>"+desc+"</div>";
+    return result;
+}
+
+/**
  * fonction de rappel pour le moment où la page est initialisée
  **/
 $(function() {
@@ -242,4 +330,6 @@ $(function() {
     $( "#tabs" ).tabs();
     // place les curseurs dans l'onglet graphique
     createGliders('jxgbox'); 
+    // crée la vue tabulaire
+    createTables('theTable');
 });
