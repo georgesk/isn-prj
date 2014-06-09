@@ -249,6 +249,25 @@ legend .minor{
 
 #feedback1 {
     width: 500px;
-    height: 100px;
+    min-height: 50px;
     border: 1px solid grey;
+}
+
+.score1{
+    color: red; 
+    font-size:140%; 
+    float: left; 
+    border: 1px solid red; 
+    padding-left: 0.5ex; 
+    padding-right: 0.5ex; 
+    margin-left: 0.5ex;
+    margin-right: 0.5ex;
+}
+
+.competence{
+    color: grey;
+    border: 1px grey dotted;
+    font-size: 70%;
+    padding: 0.2ex;
+    margin: 0.5ex;
 }
