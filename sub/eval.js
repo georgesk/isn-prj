@@ -217,13 +217,29 @@ function indicToCapa(i){
  * @param tableid id d'un élément DOM contenant un tableau avec des indicateurs
  **/
 function createGliders(boxid, tableid){
-    var brd = JXG.JSXGraph.initBoard(boxid, {boundingbox: [-10, 10, 10, -10]});
+    var brd = JXG.JSXGraph.initBoard(boxid, {boundingbox: [-11, 11, 11, -11]});
 
     var center = brd.create('point', [0, 0],{
 	name: "", 
 	fixed: true, 
 	face: '+', 
 	size: 1,
+    });
+    var dataArr = [1,1,1,1,1];
+    var pie = brd.createElement('chart', dataArr, {
+	chartStyle:'pie',  
+        colorArray:['#0F408D','#6F1B75','#CA147A','#DA2228','#E8801B'],
+        fillOpacity:0.5, 
+	center:[0,0], 
+	strokeColor:'white', 
+	highlightStrokeColor:'white', 
+	strokeWidth:2,
+        labelArray:['C1','C2','C3','C4','Global'],
+        highlightColorArray:['#E46F6A','#F9DF82','#F7FA7B','#B0D990','#69BF8E','#BDDDE4','#92C2DF','#637CB0','#AB91BC','#EB8EBF'],
+        highlightOnSector:true, 
+        highlightBySize:true,
+        gradient:'linear',
+	radius: 10,
     });
     var indics=$("#"+tableid).find("[id^=indic]");
     var capas = {};
@@ -314,7 +330,6 @@ function gliderDescription(i){
 	desc=competences[capa].desc;
     } else {
 	var capa0=capa.split(".")[0]; // par exemple, "C1.2" donnera "C1"
-	console.log(capa, capa0);
 	if (capa0 in competences && capa in competences[capa0].sub){
 	    var d = competences[capa0].sub[capa].desc;
 	    d=d.split("/");
