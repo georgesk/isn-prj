@@ -140,10 +140,34 @@ function makeSnapFunction(points, levels){
 	if (levels[found] != lastlevel){
 	    // pas d'action si le snap n'a pas changé depuis la dernière fois.
 	    lastlevel = levels[found];
+	    ajusteIndicateurTableau(this.index,levels[found]);
 	    feedback1("<div class='score1'>",levels[found], "</div>", this.desc);
 	}
     };
 };
+
+/**
+ * ajuste un indicateur dans la vue tableau
+ * @param index le numéro d'ordre de l'indicateur
+ * @param val sa valeur
+ **/
+function ajusteIndicateurTableau(index, val){
+    var sel = $("#indic"+index);
+    sel.val(val);
+}
+
+/**
+ * ajuste un glider dans la vue graphique
+ * @param index le numéro d'ordre de l'indicateur
+ * @param val sa valeur
+ **/
+function ajusteIndicateurGraphique(index, val){
+    var g=gliders[index];
+    // peut être un bug de jsxgraph 0.98 ?
+    // setGliderPosition ne fonctionne pas à la toute première invocation
+    g.setGliderPosition(val/(levels.length-1));
+    g.setGliderPosition(val/(levels.length-1));
+}
 
 /**
  * Cette fonction prend la liste de ses arguments et les affiche (forcés
@@ -165,6 +189,7 @@ function feedback1(){
  **/
 function createTables(boxid){
     var t =$("<table>",{"class": "table1"});
+    var indic_index = 0;
     $("#"+boxid).append(t);
     for(var c0 in competences){
 	var tr=$("<tr>");
@@ -197,11 +222,13 @@ function createTables(boxid){
 		tr1.append(td);
 		// on récupère les indicateurs relatifs à la capacité c1
 		var matching = indicateurs.filter(function(elt, idx, arr){return elt[1]==c1;})
-		tr1.append(cellWithTable(matching));
+		tr1.append(cellWithTable(matching, indic_index));
+		indic_index=indic_index+matching.length;
 	    }
 	} else { // pas de subdivision de la compétence
 	    var matching = indicateurs.filter(function(elt, idx, arr){return elt[1]==c0;})
-	    tr.append(cellWithTable(matching));
+	    tr.append(cellWithTable(matching, indic_index));
+	    indic_index=indic_index+matching.length;
 	}
     }
 }
@@ -211,21 +238,37 @@ function createTables(boxid){
  * correspondent à une capacité. La case est vide s'il n'y a pas
  * d'indicteurs sélectionnés.
  * @param matching tableau d'indicateurs sélectionnés par capacité
+ * @param indic_index un index des indicateurs qui permet de faire la liaison
+ * avec les "gliders"
  * @return un objet jQuery représentant une cellule de tableau
  **/
-function cellWithTable(matching){
+function cellWithTable(matching, indic_index){
     var td = $("<td>",{"class":"indicateur"});
     if (matching.length==0) return td;
     var t2=$("<table>",{"class": "table3"});
     td.append(t2);
     var cg=$("<colgroup>");
     t2.append(cg);
-    var col1=$("<col span='1' style='width: 100%;'>");
+    var col1=$("<col span='1' style='width: 10%;'><col span='1' style='width: 90%;'>");
     cg.append(col1);
     for(var i=0; i < matching.length; i++){
 	var tr=$("<tr>");
 	t2.append(tr);
 	var td1 = $("<td>");
+	tr.append(td1);
+	var sel= $("<select>", {id: "indic"+indic_index});
+	var index=indic_index; // recopie avant de générer la fonction
+	sel.change(function(){
+	    ajusteIndicateurGraphique(index, $(this).val());
+	});
+	indic_index++;
+	td1.append(sel);
+	for (var j=0; j <4; j++){
+	    var op=$("<option>", {value: j});
+	    sel.append(op);
+	    op.html(j)
+	}
+	td1 = $("<td>");
 	tr.append(td1);
 	td1.html(matching[i][0]);
     }
@@ -282,6 +325,9 @@ function createGliders(boxid){
 	a.handleSnapToPoints = makeSnapFunction(attractors, levels);
 	// on y attache une description complète
 	a.desc = gliderDescription(i);
+	// on y attache son numéro d'ordre et son angle polaire
+	a.index = i;
+	a.angle = angle;
 	// on ajoute le cuseur à la liste
 	gliders.push(a);
     }

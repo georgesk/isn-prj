@@ -291,3 +291,12 @@ legend .minor{
     border-collapse: collapse;
     width: 100%;
 }
+
+#polygones {
+    float: left;
+}
+
+#tableau {
+    float: right;
+    width: 60%;
+}
