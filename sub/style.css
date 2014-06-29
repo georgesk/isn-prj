@@ -264,7 +264,7 @@ legend .minor{
     margin-right: 0.5ex;
 }
 
-.competence{
+div.competence{
     color: grey;
     border: 1px grey dotted;
     font-size: 70%;
@@ -300,3 +300,13 @@ legend .minor{
     float: right;
     width: 60%;
 }
+
+td span.competence {
+    font-weight: bold;
+}
+
+td span.explication {
+    font-size: 80%;
+}
+
+

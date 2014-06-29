@@ -29,7 +29,7 @@
 /**
  * variables globales concernant la disposition des curseurs
  **/
-var nbCapacites = indicateurs.length; // nombre d'indicateurs
+var nbCapacites = 5;       // nombre de capacités
 var levels = [0, 1, 2, 3]; // niveaux possibles
 
 var r1 = 6, r2 = 9;        // plus petite et plus grande valeur du rayon
@@ -75,7 +75,7 @@ function makeSnapFunction(points, levels){
  * @param val sa valeur
  **/
 function ajusteIndicateurTableau(index, val){
-    var sel = $("#indic"+index);
+    var sel = $("#"+index);
     sel.val(val);
 }
 
@@ -122,7 +122,7 @@ function createTables(boxid){
 	var col2=$("<col span='1' style='width: 80%;'>");
 	cg.append(col2);
 	var td = $("<td>");
-	td.html("<b>"+c0+"</b> "+competences[c0].desc);
+	td.html("<span class='competence'>"+c0+"</span> <span class='explication'>"+competences[c0].desc+"</span>");
 	tr.append(td);
 	if ("sub" in competences[c0]){
 	    var td1=$("<td>");
@@ -139,7 +139,7 @@ function createTables(boxid){
 		var tr1 = $("<tr>");
 		t1.append(tr1);
 		var td = $("<td>");
-		td.html("<b>"+c1+"</b> "+competences[c0].sub[c1].desc);
+		td.html("<span class='competence'>"+c1+"</span> <span class='explication'>"+competences[c0].sub[c1].desc+"</span>");
 		tr1.append(td);
 		// on récupère les indicateurs relatifs à la capacité c1
 		var matching = indicateurs.filter(function(elt, idx, arr){return elt[1]==c1;})
@@ -195,12 +195,28 @@ function cellWithTable(matching, indic_index){
     }
     return td;
 }
+/**
+ * Récupère la capacité à partir d'un indicateur
+ * @param i un élément DOM correspondant au <select> d'un indicateur
+ * @result le nom de capacité correspondant à i
+ **/
+function indicToCapa(i){
+    // la recherche dans l'arbre DOM est très dépendante de la structure
+    // du tableau créé par ce même programme.
+    //////////////////////////////////////////
+    // on remonte les lignes parentes et on garde la plus élevée
+    var trTop=$(i).parents("tr"); 
+    trTop=trTop[trTop.length-1];
+    // on renvoie le premier texte en gras dans cette ligne
+    return $($(trTop).find(".competence")[0]).text();
+}
 
 /**
  * création des curseurs
  * @param boxid id d'un élément DOM où créer le panneau de JSXgraph
+ * @param tableid id d'un élément DOM contenant un tableau avec des indicateurs
  **/
-function createGliders(boxid){
+function createGliders(boxid, tableid){
     var brd = JXG.JSXGraph.initBoard(boxid, {boundingbox: [-10, 10, 10, -10]});
 
     var center = brd.create('point', [0, 0],{
@@ -209,50 +225,68 @@ function createGliders(boxid){
 	face: '+', 
 	size: 1,
     });
-    for(var i=0; i < nbCapacites; i++){ // crée autant de curseurs qu'il faut
-	var angle = 2 * Math.PI * i / nbCapacites;
-	var attractors=[];
-	for(j=0; j < levels.length; j++){ // pour autant de niveaux qu'il faut
-	    // on crée un attracteur
-	    var r = r1 + (levels[j]-levels[0])*(r2-r1)/(levels[levels.length-1]- levels[0]);
-	    var at = brd.create('point', [r*Math.cos(angle), r*Math.sin(angle)],{
-		name: "", 
-		fixed: true, 
-		face: '+', 
-		size: 2,
-	    });
-	    attractors.push(at); // on range l'attracteur
-	    // on trace un cercle
-	    var c = brd.create('circle',[center, r], {
-		color: '#EEEEEE', 
-		dash: 2, 
-		fillOpacity: 0,
-	    });
+    var indics=$("#"+tableid).find("[id^=indic]");
+    var capas = {};
+    for(var ind=0; ind<indics.length; ind++){ 
+	// recensement des capacités et comptage des indicateurs
+	var i = indics[ind];
+	var c=indicToCapa(i);
+	if (c in capas){
+	    capas[c].push($(i));
+	} else {
+	    capas[c]=[$(i)];
 	}
-	// le support du curseur va du premier au dernier attracteur
-	var aSlide = brd.create('segment', [attractors[0], attractors[attractors.length-1]]);
-	// on crée le curseur lui-même et on lui attache les attracteurs
-	var a = brd.create('glider', [r1*Math.cos(angle), r1*Math.sin(angle), aSlide], {
-	    attractors: attractors, 
-	    attractorDistance: (r2-r1)/levels.length, 
-	    name: indicateurs[i][1], // juste le code de la capacité
-	    size: 8,
-	});
-	// on ajoute une fonction déclenchée lorsque les attracteurs agissent
-	//
-	// TODO !! il faudrait aussi réveiller cette fonction de rappel
-	// quand on clique sur le curseur, sans quoi il faut le bouger
-	// pour obtenir les renseignements qui le concernent, en plus.
-	a.handleSnapToPoints = makeSnapFunction(attractors, levels);
-	// on y attache une description complète
-	a.desc = gliderDescription(i);
-	// on y attache son numéro d'ordre et son angle polaire
-	a.index = i;
-	a.angle = angle;
-	// on ajoute le cuseur à la liste
-	gliders.push(a);
     }
-
+    var nc=0
+    for(c in capas){ 
+	var IndicateursIci = capas[c];
+	var nbInd=IndicateursIci.length; // nombre d'indicateurs de la capacité
+	for (var i=0; i < nbInd; i++){
+	    // crée autant de curseurs qu'il faut
+	    var angle = 2 * Math.PI / nbCapacites * (nc+ (i+1/2)/nbInd);
+	    var attractors=[];
+	    for(j=0; j < levels.length; j++){ // pour autant de niveaux qu'il faut
+		// on crée un attracteur
+		var r = r1 + (levels[j]-levels[0])*(r2-r1)/(levels[levels.length-1]- levels[0]);
+		var at = brd.create('point', [r*Math.cos(angle), r*Math.sin(angle)],{
+		    name: "", 
+		    fixed: true, 
+		    face: '+', 
+		    size: 2,
+		});
+		attractors.push(at); // on range l'attracteur
+		// on trace un cercle
+		var cercle = brd.create('circle',[center, r], {
+		    color: '#EEEEEE', 
+		    dash: 2, 
+		    fillOpacity: 0,
+		});
+	    }
+	    // le support du curseur va du premier au dernier attracteur
+	    var aSlide = brd.create('segment', [attractors[0], attractors[attractors.length-1]]);
+	    // on crée le curseur lui-même et on lui attache les attracteurs
+	    var a = brd.create('glider', [r1*Math.cos(angle), r1*Math.sin(angle), aSlide], {
+		attractors: attractors, 
+		attractorDistance: (r2-r1)/levels.length, 
+		name: gliderName(IndicateursIci[i]), // juste le code de la capacité
+		size: 8,
+	    });
+	    // on ajoute une fonction déclenchée lorsque les attracteurs agissent
+	    //
+	    // TODO !! il faudrait aussi réveiller cette fonction de rappel
+	    // quand on clique sur le curseur, sans quoi il faut le bouger
+	    // pour obtenir les renseignements qui le concernent, en plus.
+	    a.handleSnapToPoints = makeSnapFunction(attractors, levels);
+	    // on y attache une description complète
+	    a.desc = gliderDescription(IndicateursIci[i]);
+	    // on y attache son numéro d'ordre et son angle polaire
+	    a.index = IndicateursIci[i].attr("id");
+	    a.angle = angle;
+	    // on ajoute le cuseur à la liste
+	    gliders.push(a);
+	}
+	nc++; // incrémente l'index de capacité
+    }
     // on crée un polygone sous-tendu par les curseurs.
     var p = brd.create('polygon', gliders, {
 	hasInnerPoints: true,
@@ -261,18 +295,26 @@ function createGliders(boxid){
 
 /**
  * Donne la description complète d'un curseur
- * @param i le numéro d'ordre du curseur
+ * @param i l'index d'un curseur
  * @return un contenu au format HTML pour mettre dans un <div>
  **/
 function gliderDescription(i){
     var result="";
-    var capa = indicateurs[i][1];
-    result=capa+" :<br/>"+indicateurs[i][0]+"<br/>";
+    // l'implémentation qui suit est très dépendante du tableau créé
+    // ailleurs par ce même programme.
+    // on remonte les lignes parentes et on garde la ligne un cran plus haut
+    var trTop=$(i).parents("tr"); 
+    var trLow=trTop[0];
+    var phraseIndic = $($(trLow).find("td")[1]).text()
+    trTop=trTop[1];
+    var capa = $($(trTop).find(".competence")[0]).text();
+    result=capa+" :<br/>"+phraseIndic+"<br/>";
     var desc="";
     if (capa in competences){// on est au niveau supérieur de l'arbre
 	desc=competences[capa].desc;
     } else {
 	var capa0=capa.split(".")[0]; // par exemple, "C1.2" donnera "C1"
+	console.log(capa, capa0);
 	if (capa0 in competences && capa in competences[capa0].sub){
 	    var d = competences[capa0].sub[capa].desc;
 	    d=d.split("/");
@@ -290,13 +332,29 @@ function gliderDescription(i){
 }
 
 /**
+ * Donne la nom d'un curseur
+ * @param i l'index d'un curseur
+ * @return une chaîne courte
+ **/
+function gliderName(i){
+    // l'implémentation qui suit est très dépendante du tableau créé
+    // ailleurs par ce même programme.
+    // on remonte les lignes parentes et on garde la ligne un cran plus haut
+    var trTop=$(i).parents("tr"); 
+    var trLow=trTop[0];
+    var phraseIndic = $($(trLow).find("td")[1]).text()
+    trTop=trTop[1];
+    var capa = $($(trTop).find(".competence")[0]).text();
+    var result=capa+" "+phraseIndic.substr(0,18)+"...";
+    return result;
+}
+
+/**
  * fonction de rappel pour le moment où la page est initialisée
  **/
 $(function() {
-    // crée les onglets dynamiques
-    $( "#tabs" ).tabs();
-    // place les curseurs dans l'onglet graphique
-    createGliders('jxgbox'); 
     // crée la vue tabulaire
     createTables('theTable');
+    // place les curseurs dans l'onglet graphique
+    createGliders('jxgbox', 'theTable'); 
 });
