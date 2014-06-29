@@ -217,7 +217,10 @@ function indicToCapa(i){
  * @param tableid id d'un élément DOM contenant un tableau avec des indicateurs
  **/
 function createGliders(boxid, tableid){
-    var brd = JXG.JSXGraph.initBoard(boxid, {boundingbox: [-11, 11, 11, -11]});
+    var brd = JXG.JSXGraph.initBoard(boxid, {
+	showNavigation:false,
+	showCopyright:false,
+	boundingbox: [-11, 11, 11, -11]});
 
     var center = brd.create('point', [0, 0],{
 	name: "", 

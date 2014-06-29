@@ -251,6 +251,7 @@ legend .minor{
     width: 500px;
     min-height: 50px;
     border: 1px solid grey;
+    border-radius: 5px;
 }
 
 .score1{
@@ -309,4 +310,18 @@ td span.explication {
     font-size: 80%;
 }
 
+#legalstuff {
+    font-size: 80%;
+    color: grey;
+    border: 1px grey solid;
+    border-radius: 5px;
+}
+
+#legalstuff a{
+    text-decoration:none;
+}
+#legalstuff a:hover{
+    font-size:150%;
+    text-decoration:underline;
+}
 
